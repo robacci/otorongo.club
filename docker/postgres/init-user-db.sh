@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-DB_NAME="manolo"
+DB_NAME="otorongo"
 POSTGRES_USER="postgres"
 
 echo "CREATING ${DB_NAME} DB for admin user ${POSTGRES_USER}"
