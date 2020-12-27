@@ -27,6 +27,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['localhost']
 
+ROOT_DIR = Path(__file__).resolve(strict=True).parent.parent.parent
+LOG_DIR = str(ROOT_DIR / 'docker/devdata/logs/')
 
 # Application definition
 
@@ -126,3 +128,73 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
+
+SIMPLE_LOG_FORMAT = '%(levelname)s %(message)s'
+VERBOSE_LOG_FORMAT = '[%(asctime)s] [%(levelname)s] [%(threadName)s] ' \
+                     '[%(name)s] [%(lineno)d] %(message)s'
+
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': True,
+    'formatters': {
+        'verbose': {
+            'format': VERBOSE_LOG_FORMAT
+        },
+        'simple': {
+            'format': SIMPLE_LOG_FORMAT
+        },
+    },
+
+    'filters': {
+        'require_debug_false': {
+            '()': 'django.utils.log.RequireDebugFalse'
+        }
+    },
+
+    'handlers': {
+        'null': {
+            'level': 'DEBUG',
+            'class': 'logging.NullHandler',
+        },
+        'terminal': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+            'formatter': 'verbose',
+        },
+        'mail_admins': {
+            'level': 'ERROR',
+            'class': 'django.utils.log.AdminEmailHandler',
+            'filters': ['require_debug_false'],
+        },
+        'file': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'filename': LOG_DIR + '/otorongo.club.main.log',
+            'formatter': 'verbose',
+        },
+        'file_debug': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': LOG_DIR + '/otorongo.club.main.debug.log',
+            'formatter': 'verbose',
+        },
+    },
+
+    'loggers': {
+        'django': {
+            'handlers': ['null'],
+            'propagate': True,
+            'level': 'INFO',
+        },
+        'django.request': {
+            'handlers': ['terminal', 'mail_admins'],
+            'level': 'ERROR',
+            'propagate': False,
+        },
+        'votes': {
+            'handlers': ['terminal', 'file', 'mail_admins'],
+            'level': 'DEBUG',
+        },
+    },
+}
