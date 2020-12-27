@@ -132,8 +132,8 @@ def candidato_2021(request, dni):
                                     context['ingresos'].decRentaIndividualPrivado + \
                                     context['ingresos'].decOtroIngresoPublico + \
                                     context['ingresos'].decOtroIngresoPrivado
-        return render(
-            request,
+    return render(
+        request,
         'votes/candidate.html',
         context,
     )
