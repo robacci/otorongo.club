@@ -11,9 +11,8 @@ RUN apt-get install -y gcc postgresql-client-13 libpq-dev musl-dev bash postgres
 
 RUN apt-get autoremove -y
 RUN mkdir /pip_requirements
-ADD requirements/base.txt /base.txt
-ADD requirements/production.txt /pip_requirements.txt
-RUN pip install -r /pip_requirements.txt
+COPY requirements/base.txt /pip_requirements/base.txt
+RUN pip install -r /pip_requirements/base.txt
 
 RUN mkdir -p /code
 WORKDIR /code
