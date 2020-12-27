@@ -1,7 +1,11 @@
 from django.http import Http404
 from django.shortcuts import render
+from django.conf import settings
+from django.core.cache.backends.base import DEFAULT_TIMEOUT
 
 from votes.models import Person, Elections, Ingresos, BienMueble, BienInmueble
+
+CACHE_TTL = getattr(settings, 'CACHE_TTL', DEFAULT_TIMEOUT)
 
 
 def index(request):
@@ -10,7 +14,7 @@ def index(request):
         'votes/index.html'
     )
 
-
+@cache_page(CACHE_TTL)
 def ingresos_2021(request):
     election = Elections.objects.get(
         name='Elecciones Generales 2021'
@@ -46,6 +50,7 @@ def ingresos_2021(request):
     )
 
 
+@cache_page(CACHE_TTL)
 def bienes_2021(request):
     context, election = make_context()
     persons = []
