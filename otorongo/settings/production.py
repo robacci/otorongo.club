@@ -1,3 +1,5 @@
+import os
+
 from .base import *
 
 
@@ -14,3 +16,4 @@ MEDIA_ROOT = "/data/media/"
 STATIC_ROOT = "/data/static/"
 
 DEBUG = False
+os.environ["DJANGO_ALLOW_ASYNC_UNSAFE"] = "true"
