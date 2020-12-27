@@ -1,0 +1,34 @@
+{% extends 'votes/base.html' %}
+{% load humanize %}
+
+{% block title %}
+  Otorongo search: {{ query }}
+{% endblock title %}
+
+{% block content %}
+  <h4>
+    {{ all_items_count }}
+    resultados de búsqueda por query: {{ query }}
+  </h4>
+
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+
+        <ol>
+          {% for candidate in all_items %}
+            <li>
+              {{ candidate.strApellidoPaterno }} {{ candidate.strApellidoMaterno }},
+              {{ candidate.strNombres }} (DNI:
+
+              <a href="/2021/candidato/{{ candidate.dni_number }}">
+                {{ candidate.dni_number }}</a>)
+            </li>
+          {% endfor %}
+        </ol>
+
+      </div>
+    </div>
+  </div>
+
+{% endblock content %}
