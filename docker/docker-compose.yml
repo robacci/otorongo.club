@@ -36,7 +36,7 @@ services:
       - app_data:/data
       - /logs
     expose:
-      - "8000"
+      - "8001"
     depends_on:
       - db
     environment:
