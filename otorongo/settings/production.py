@@ -4,7 +4,11 @@ from .base import *
 DATABASES["default"]["USER"] = "postgres"
 DATABASES["default"]["HOST"] = "db"
 
-ALLOWED_HOSTS = ['localhost', 'otorongo.club']
+
+ALLOWED_HOSTS = [
+    '.otorongo.club',  # Allow domain and subdomains
+    '.otorongo.club.',  # Also allow FQDN and subdomains
+]
 
 MEDIA_ROOT = "/data/media/"
 STATIC_ROOT = "/data/static/"
