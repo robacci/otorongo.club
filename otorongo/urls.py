@@ -16,11 +16,12 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from votes.views import index, ingresos_2021, bienes_2021, candidato_2021
+from votes.views import index, ingresos_2021, bienes_2021, candidato_2021, search
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', index),
+    path('search/', search),
     path('2021/ingresos/', ingresos_2021),
     path('2021/bienes/', bienes_2021),
     path('2021/candidato/<str:dni>/', candidato_2021),

@@ -1,8 +1,10 @@
+from django.contrib.postgres.search import SearchQuery
 from django.http import Http404
 from django.shortcuts import render
 from django.conf import settings
 from django.core.cache.backends.base import DEFAULT_TIMEOUT
 from django.views.decorators.cache import cache_page
+from django.views.decorators.csrf import csrf_exempt
 
 from votes.models import Person, Elections, Ingresos, BienMueble, BienInmueble
 
@@ -13,6 +15,28 @@ def index(request):
     return render(
         request,
         'votes/index.html'
+    )
+
+
+@csrf_exempt
+def search(request):
+    context, election = make_context()
+    query = request.GET.get('q') or ''
+    query = query.strip()
+
+    all_items = Person.objects.filter(
+        full_search=SearchQuery(query),
+        elections=election,
+    )
+    print(all_items)
+    context['all_items'] = all_items
+    context['all_items_count'] = all_items.count()
+    context['query'] = query
+
+    return render(
+        request,
+        'votes/search.html',
+        context,
     )
 
 

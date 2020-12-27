@@ -1,3 +1,5 @@
+from django.contrib.postgres.indexes import GinIndex
+from django.contrib.postgres.search import SearchVectorField, SearchVector
 from django.db import models
 from django.db.models import SET_NULL
 
@@ -22,6 +24,8 @@ class Image(models.Model):
 
 
 class Person(models.Model):
+    full_search = SearchVectorField(null=True)
+
     dni_number = models.CharField(max_length=8, unique=True, null=True)
     first_names = models.TextField()
     last_names = models.TextField()
@@ -124,8 +128,26 @@ class Person(models.Model):
     intTotalPersonero = models.IntegerField(null=True, blank=True)
     intOrden = models.IntegerField(null=True, blank=True)
 
+    def save(self, *args, **kwargs):
+        """Need to update the combined field for full text search"""
+        super(Person, self).save(*args, **kwargs)
+        if not self.full_search:
+            Person.objects.filter(
+                id=self.id
+            ).update(
+                full_search=SearchVector(
+                    'dni_number', 'strApellidoPaterno', 'strApellidoMaterno',
+                    'strNombres',
+                )
+            )
+
     class Meta:
         unique_together = ['first_names', 'last_names']
+        indexes = [
+            GinIndex(
+                fields=['full_search'], name='full_search_idx'
+            )
+        ]
 
     def __str__(self):
         return f'{self.last_names}, {self.first_names} (DNI: {self.dni_number})'
