@@ -15,6 +15,7 @@ def index(request):
         'votes/index.html'
     )
 
+
 @cache_page(CACHE_TTL)
 def ingresos_2021(request):
     election = Elections.objects.get(
@@ -128,9 +129,11 @@ def candidato_2021(request, dni):
         context['ingresos_total'] = context['ingresos'].decRemuBrutaPublico + \
                                     context['ingresos'].decRemuBrutaPrivado + \
                                     context['ingresos'].decRentaIndividualPublico + \
-                                    context['ingresos'].decRentaIndividualPrivado
-    return render(
-        request,
+                                    context['ingresos'].decRentaIndividualPrivado + \
+                                    context['ingresos'].decOtroIngresoPublico + \
+                                    context['ingresos'].decOtroIngresoPrivado
+        return render(
+            request,
         'votes/candidate.html',
         context,
     )
