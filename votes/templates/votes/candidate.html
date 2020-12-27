@@ -1,0 +1,133 @@
+{% extends 'votes/base.html' %}
+{% load humanize %}
+
+{% block content %}
+  <h3>{{ candidate }}</h3>
+
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Datos personales</h5>
+          <img
+            src="data:image/png;base64, {{ candidate.photo.image }}"
+            alt="Foto"
+            width="200px"
+          /><br/>
+          DNI: {{ candidate.dni_number }} <br/>
+          Apellido Paterno: {{ candidate.strApellidoPaterno }} <br/>
+          Apellido Materno: {{ candidate.strApellidoMaterno }} <br/>
+          Nombres: {{ candidate.strNombres }} <br/>
+          Fecha de nacimiento: {{ candidate.strFechaNacimiento }} <br/>
+          <br/>
+
+          <h6>Lugar de Nacimiento:</h6>
+          País: {{ candidate.strPaisNacimiento }} <br/>
+          Departamento: {{ candidate.strNaciDepartamento }} <br/>
+          Provincia: {{ candidate.strNaciProvincia }} <br/>
+          Distrito: {{ candidate.strNaciDistrito }} <br/>
+          <br/>
+
+          <h6>Lugar de Domicilio:</h6>
+          Departamento: {{ candidate.strDomiDepartamento }} <br/>
+          Provincia: {{ candidate.strDomiProvincia }} <br/>
+          Distrito: {{ candidate.strDomiDistrito }} <br/>
+          <br/>
+
+          <h6>Organización Política al que Postula:</h6>
+            {{ candidate.strOrganizacionPolitica }}
+          <br/>
+
+{#          <h6>Cargo al que Postula</h6>#}
+{#            {{ candidate.strCargoEleccion }}#}
+{#          <br/>#}
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">DECLARACIÓN JURADA DE INGRESOS DE BIENES Y RENTAS</h5>
+          <table class="table table-striped">
+            <thead>
+              <th>Año declarado 2019</th>
+              <th>Sector Público</th>
+              <th>Sector Privado</th>
+{#              <th>TOTAL S/.</th>#}
+            </thead>
+            <tbody>
+              <tr>
+                <td>REMUNERACIÓN BRUTA ANUAL</td>
+                <td>{{ ingresos.decRemuBrutaPublico|intcomma }}</td>
+                <td>{{ ingresos.decRemuBrutaPrivado|intcomma }}</td>
+{#                <td>{{ ingresos.decRemuTotal|intcomma }}</td>#}
+              </tr>
+              <tr>
+                <td>RENTA BRUTA ANUAL POR EJERCICIO INDIVIDUAL</td>
+                <td>{{ ingresos.decRentaIndividualPublico|intcomma }}</td>
+                <td>{{ ingresos.decRentaIndividualPrivado|intcomma }}</td>
+              </tr>
+              <tr>
+                <td><b>Total ingresos S/. {{ ingresos_total|intcomma }}</b></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Bienes Inmuebles del Declarante y Sociedad de Gananciales</h5>
+          <h6>Inmuebles</h6>
+          <table class="table table-striped">
+            <thead>
+              <th>N.</th>
+              <th>Tipo de Bien</th>
+              <th>Valor</th>
+              <th>Comentario</th>
+            </thead>
+            <tbody>
+            {% for inmueble in inmuebles %}
+              <tr>
+                <td>{{ inmueble.intItemInmueble }}</td>
+                <td>{{ inmueble.strTipoBienInmueble }}</td>
+                <td>{{ inmueble.decAutovaluo|intcomma }}</td>
+                <td>{{ inmueble.strComentario|intcomma }}</td>
+              </tr>
+            {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Bienes Muebles del Declarante y Sociedad de Gananciales</h5>
+          <h6>Muebles</h6>
+          <table class="table table-striped">
+            <thead>
+            <th>N.</th>
+            <th>Tipo de Bien</th>
+            <th>Valor</th>
+            <th>Comentario</th>
+            </thead>
+            <tbody>
+            {% for mueble in muebles %}
+              <tr>
+                <td>{{ mueble.intItemMueble }}</td>
+                <td>{{ mueble.strVehiculo }}</td>
+                <td>{{ mueble.decValor|intcomma }}</td>
+                <td>{{ mueble.strComentario|intcomma }}</td>
+              </tr>
+            {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      </div>
+    </div>
+  </div>
+
+{% endblock content %}

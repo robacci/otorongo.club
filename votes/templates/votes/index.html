@@ -1,0 +1,22 @@
+{% extends 'votes/base.html' %}
+
+{% block content %}
+  <p>Aquí encontrarás la lista de candidatos a las Elecciones Generales
+  2021.
+  Los candidatos enviaron al JNE sus datos como, estudios, ingresos,
+  bienes muebles, inmuebles, sentencias penales etc.
+  </p>
+
+  <p>Toda la información es pública y está  colgada en la
+    <a href="https://plataformaelectoral.jne.gob.pe/" target="_blank">
+      página web del JNE
+    </a>
+    pero no es de fácil acceso.
+  </p>
+
+
+  <ol>
+    <li>Lista de candidatos con <a href="/2021/ingresos/">mayores ingresos declarados en el año 2019</a></li>
+    <li>Lista de candidatos con <a href="/2021/bienes/">mayor valor de bienes muebles e inmuebles</a></li>
+  </ol>
+{% endblock content %}

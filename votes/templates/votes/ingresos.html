@@ -1,0 +1,62 @@
+{% extends 'votes/base.html' %}
+{% load humanize %}
+
+{% block content %}
+  <h3>Lista de candidatos a elecciones generales 2021 ordenados por remuneración declarada</h3>
+
+  <table class="table table-striped">
+    <thead>
+    <tr>
+      <th>Nombre</th>
+      <th>DNI</th>
+      <th>Partido</th>
+      <th>Total ingresos S/.</th>
+      <th>Ingreso Público S/.</th>
+      <th>Ingreso Privado S/.</th>
+      <th>Renta Público S/.</th>
+      <th>Renta Privado S/.</th>
+      <th>Otro ingreso Público S/.</th>
+      <th>Otro ingreso Privado S/.</th>
+    </tr>
+
+    </thead>
+    <tbody>
+      {% for candidate in candidates %}
+        <tr>
+          <td>
+            {{ candidate.last_names }} {{ candidate.first_names }}
+          </td>
+          <td>
+            <a href="/2021/candidato/{{ candidate.dni_number }}">
+              {{ candidate.dni_number }}
+            </a>
+          </td>
+          <td>
+            {{ candidate.strOrganizacionPolitica }}
+          </td>
+          <td>
+            <b>{{  candidate.ingreso_total|intcomma }}</b>
+          </td>
+          <td>
+            {{  candidate.ingreso.decRemuBrutaPublico|intcomma }}
+          </td>
+          <td>
+            {{  candidate.ingreso.decRemuBrutaPrivado|intcomma }}
+          </td>
+          <td>
+            {{  candidate.ingreso.decRentaIndividualPublico|intcomma }}
+          </td>
+          <td>
+            {{  candidate.ingreso.decRentaIndividualPrivado|intcomma }}
+          </td>
+          <td>
+            {{  candidate.ingreso.decOtroIngresoPublico|intcomma }}
+          </td>
+          <td>
+            {{  candidate.ingreso.decOtroIngresoPrivado|intcomma }}
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock content %}

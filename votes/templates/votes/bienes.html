@@ -1,0 +1,47 @@
+{% extends 'votes/base.html' %}
+{% load humanize %}
+
+{% block content %}
+  <h3>Lista de candidatos a elecceiones generales 2021 ordenados por
+    valor de bienes muebles e inmuebles declarados</h3>
+
+  <table class="table table-striped">
+    <thead>
+    <tr>
+      <th>Nombre</th>
+      <th>DNI</th>
+      <th>Partido</th>
+      <th>Total muebles e inmuebles S/.</th>
+      <th>Valor muebles S/.</th>
+      <th>Valor inmuebles S/.</th>
+    </tr>
+
+    </thead>
+    <tbody>
+      {% for candidate in candidates %}
+        <tr>
+          <td>
+            {{ candidate.last_names }} {{ candidate.first_names }}
+          </td>
+          <td>
+            <a href="/2021/candidato/{{ candidate.dni_number }}">
+              {{ candidate.dni_number }}
+            </a>
+          </td>
+          <td>
+            {{ candidate.strOrganizacionPolitica }}
+          </td>
+          <td>
+            <b>{{  candidate.total_muebles_inmuebles|intcomma }}</b>
+          </td>
+          <td>
+            {{  candidate.muebles|intcomma }}
+          </td>
+          <td>
+            {{  candidate.inmuebles|intcomma }}
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock content %}
