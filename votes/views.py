@@ -1,4 +1,5 @@
 from django.contrib.postgres.search import SearchQuery
+from django.core.paginator import InvalidPage
 from django.http import Http404
 from django.shortcuts import render
 from django.conf import settings
@@ -6,7 +7,8 @@ from django.core.cache.backends.base import DEFAULT_TIMEOUT
 from django.views.decorators.cache import cache_page
 from django.views.decorators.csrf import csrf_exempt
 
-from votes.models import Person, Elections, Ingresos, BienMueble, BienInmueble
+from votes.models import Person, Elections, Ingresos, BienMueble, BienInmueble, CompiledPerson
+from votes.utils import Paginator
 
 CACHE_TTL = getattr(settings, 'CACHE_TTL', DEFAULT_TIMEOUT)
 
@@ -40,35 +42,21 @@ def search(request):
     )
 
 
-@cache_page(CACHE_TTL)
 def ingresos_2021(request):
     election = Elections.objects.get(
         name='Elecciones Generales 2021'
     )
     context = {'election': election}
-    persons = []
 
-    for person in Person.objects.filter(elections=election):
-        ingresos = Ingresos.objects.filter(
-            election=election,
-            person=person,
-        )
-        if ingresos:
-            ingreso = ingresos.first()
-            person.ingreso = ingreso
-            person.ingreso_total = ingreso.decRemuBrutaPublico + \
-                ingreso.decRemuBrutaPrivado + \
-                ingreso.decRentaIndividualPublico + \
-                ingreso.decRentaIndividualPrivado + \
-                ingreso.decOtroIngresoPublico + ingreso.decOtroIngresoPrivado
-        else:
-            person.ingreso_total = 0
-        persons.append(person)
+    persons = CompiledPerson.objects.filter(
+        person__elections=election,
+    ).order_by('-ingreso_total')
 
-    context['candidates'] = sorted(persons, key=lambda x: x.ingreso_total, reverse=True)
-    context['ingresos'] = Ingresos.objects.filter(
+    paginator, page = do_pagination(request, persons)
+    context['candidates'] = paginator
+    context['page'] = page
 
-    )
+
     return render(
         request,
         'votes/ingresos.html',
@@ -161,3 +149,30 @@ def candidato_2021(request, dni):
         'votes/candidate.html',
         context,
     )
+
+
+def do_pagination(request, all_items):
+    """
+    :param request: contains the current page requested by user
+    :param all_items:
+    :return: dict containing paginated items and pagination bar
+    """
+    results_per_page = 50
+    results = all_items
+
+    try:
+        page_no = int(request.GET.get('page', 1))
+    except (TypeError, ValueError):
+        raise Http404("Not a valid number for page.")
+
+    if page_no < 1:
+        raise Http404("Pages should be 1 or greater.")
+
+    paginator = Paginator(results, results_per_page)
+
+    try:
+        page = paginator.page(page_no)
+    except InvalidPage:
+        raise Http404("No such page!")
+
+    return paginator, page
