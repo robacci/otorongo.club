@@ -55,9 +55,10 @@
 
       <div class="card">
         <div class="card-body">
-          <h5 class="card-title">Relación de sentencias condenatorias firmes impuestas por delitos dolosos</h5>
+          <h5 class="card-title">Sentencias condenatorias firmes impuestas por delitos dolosos</h5>
           <table class="table table-striped">
             <thead>
+              <th>N.</th>
               <th>No de Expediente</th>
               <th>Fecha sentencia firme</th>
               <th>Órgano judicial</th>
@@ -70,6 +71,7 @@
             <tbody>
               {% for sentencia in sentencias_penal %}
                 <tr>
+                  <td>{{ sentencia.intItemSentenciaPenal }}</td>
                   <td>{{ sentencia.strExpedientePenal }}</td>
                   <td>{{ sentencia.strFechaSentenciaPenal }}</td>
                   <td>{{ sentencia.strOrganoJudiPenal }}</td>
@@ -88,11 +90,12 @@
       <div class="card">
         <div class="card-body">
           <h5 class="card-title">
-            Relación de sentencias que declaren fundadas por incumplimiento de obligaciones alimentarias,
+            Sentencias que declaren fundadas por incumplimiento de obligaciones alimentarias,
             contractuales, laborales o por incurrir en violencia familiar, que hubieran quedado firmes.
           </h5>
           <table class="table table-striped">
             <thead>
+              <th>N.</th>
               <th>Materia de la demanda</th>
               <th>No de Expediente</th>
               <th>Órgano judicial</th>
@@ -101,6 +104,7 @@
             <tbody>
             {% for sentencia in sentencias_obliga %}
               <tr>
+                <td>{{ sentencia.intItemSentenciaObliga }}</td>
                 <td>{{ sentencia.strMateriaSentencia }}</td>
                 <td>{{ sentencia.strExpedienteObliga }}</td>
                 <td>{{ sentencia.strOrganoJuridicialObliga }}</td>
