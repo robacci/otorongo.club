@@ -55,6 +55,65 @@
 
       <div class="card">
         <div class="card-body">
+          <h5 class="card-title">Relación de sentencias condenatorias firmes impuestas por delitos dolosos</h5>
+          <table class="table table-striped">
+            <thead>
+              <th>No de Expediente</th>
+              <th>Fecha sentencia firme</th>
+              <th>Órgano judicial</th>
+              <th>Delito</th>
+              <th>Fallo o pena</th>
+              <th>Modalidad</th>
+              <th>Otra modalidad</th>
+              <th>Cumplimiento del fallo</th>
+            </thead>
+            <tbody>
+              {% for sentencia in sentencias_penal %}
+                <tr>
+                  <td>{{ sentencia.strExpedientePenal }}</td>
+                  <td>{{ sentencia.strFechaSentenciaPenal }}</td>
+                  <td>{{ sentencia.strOrganoJudiPenal }}</td>
+                  <td>{{ sentencia.strDelitoPenal }}</td>
+                  <td>{{ sentencia.strFalloPenal }}</td>
+                  <td>{{ sentencia.strModalidad }}</td>
+                  <td>{{ sentencia.strOtraModalidad }}</td>
+                  <td>{{ sentencia.strCumpleFallo }}</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">
+            Relación de sentencias que declaren fundadas por incumplimiento de obligaciones alimentarias,
+            contractuales, laborales o por incurrir en violencia familiar, que hubieran quedado firmes.
+          </h5>
+          <table class="table table-striped">
+            <thead>
+              <th>Materia de la demanda</th>
+              <th>No de Expediente</th>
+              <th>Órgano judicial</th>
+              <th>Fallo/pena</th>
+            </thead>
+            <tbody>
+            {% for sentencia in sentencias_obliga %}
+              <tr>
+                <td>{{ sentencia.strMateriaSentencia }}</td>
+                <td>{{ sentencia.strExpedienteObliga }}</td>
+                <td>{{ sentencia.strOrganoJuridicialObliga }}</td>
+                <td>{{ sentencia.strFalloObliga }}</td>
+              </tr>
+            {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-body">
           <h5 class="card-title">DECLARACIÓN JURADA DE INGRESOS DE BIENES Y RENTAS</h5>
           <table class="table table-striped">
             <thead>
