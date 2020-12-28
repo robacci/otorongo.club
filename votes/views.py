@@ -63,6 +63,23 @@ def ingresos_2021(request):
     )
 
 
+def sentencias_2021(request):
+    context, election = make_context()
+    persons = CompiledPerson.objects.filter(
+        person__elections=election,
+    ).order_by('-sentencias_total')
+
+    paginator, page = do_pagination(request, persons)
+    context['candidates'] = paginator
+    context['page'] = page
+
+    return render(
+        request,
+        'votes/sentencias.html',
+        context,
+    )
+
+
 def bienes_2021(request):
     context, election = make_context()
 

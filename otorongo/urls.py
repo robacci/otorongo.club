@@ -18,7 +18,7 @@ from django.conf import settings
 from django.urls import path
 from django.conf.urls.static import static
 
-from votes.views import index, ingresos_2021, bienes_2021, candidato_2021, search
+from votes.views import index, ingresos_2021, bienes_2021, candidato_2021, search, sentencias_2021
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -26,5 +26,6 @@ urlpatterns = [
     path('search/', search),
     path('2021/ingresos/', ingresos_2021),
     path('2021/bienes/', bienes_2021),
+    path('2021/sentencias/', sentencias_2021),
     path('2021/candidato/<str:dni>/', candidato_2021),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

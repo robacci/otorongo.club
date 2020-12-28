@@ -12,8 +12,27 @@ class Command(BaseCommand):
 
 def process():
     print("processing")
-    process_ingresos()
-    process_bienes()
+    # process_ingresos()
+    # process_bienes()
+    process_sentencias()
+
+
+def process_sentencias():
+    election = Elections.objects.get(
+        name='Elecciones Generales 2021'
+    )
+    for person in Person.objects.filter(elections=election):
+        compiled_person, created = CompiledPerson.objects.get_or_create(
+            person=person
+        )
+        if created:
+            print(f'created {compiled_person}')
+
+        compiled_person.sentencias_penales = person.sentenciapenal_set.all().count()
+        compiled_person.sentencias_obliga = person.sentenciaobliga_set.all().count()
+        compiled_person.sentencias_total = compiled_person.sentencias_penales + \
+                                           compiled_person.sentencias_obliga
+        compiled_person.save()
 
 
 def process_bienes():

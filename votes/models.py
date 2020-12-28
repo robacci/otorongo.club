@@ -153,7 +153,6 @@ class Person(models.Model):
         return f'{self.last_names}, {self.first_names} (DNI: {self.dni_number})'
 
 
-
 class Ingresos(models.Model):
     election = models.ForeignKey(Elections, null=True, on_delete=SET_NULL)
     person = models.ForeignKey(Person, null=True, on_delete=SET_NULL)
@@ -179,6 +178,9 @@ class CompiledPerson(models.Model):
     muebles = models.IntegerField(null=True)
     inmuebles = models.IntegerField(null=True)
     total_muebles_inmuebles = models.IntegerField(null=True)
+    sentencias_penales = models.IntegerField(null=True)
+    sentencias_obliga = models.IntegerField(null=True)
+    sentencias_total = models.IntegerField(null=True)
 
 
 class SentenciaObliga(models.Model):
