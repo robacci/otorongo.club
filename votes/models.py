@@ -176,6 +176,9 @@ class CompiledPerson(models.Model):
     person = models.ForeignKey(Person, null=True, on_delete=SET_NULL)
     ingreso = models.ForeignKey(Ingresos, null=True, on_delete=SET_NULL)
     ingreso_total = models.IntegerField(null=True)
+    muebles = models.IntegerField(null=True)
+    inmuebles = models.IntegerField(null=True)
+    total_muebles_inmuebles = models.IntegerField(null=True)
 
 
 class SentenciaObliga(models.Model):

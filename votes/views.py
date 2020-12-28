@@ -56,7 +56,6 @@ def ingresos_2021(request):
     context['candidates'] = paginator
     context['page'] = page
 
-
     return render(
         request,
         'votes/ingresos.html',
@@ -64,41 +63,17 @@ def ingresos_2021(request):
     )
 
 
-@cache_page(CACHE_TTL)
 def bienes_2021(request):
     context, election = make_context()
-    persons = []
 
-    for person in Person.objects.filter(elections=election):
-        muebles = BienMueble.objects.filter(
-            election=election,
-            person=person,
-        )
-        if muebles:
-            person.muebles = 0
-            for mueble in muebles:
-                person.muebles += mueble.decValor
-        else:
-            person.muebles = 0
+    persons = CompiledPerson.objects.filter(
+        person__elections=election
+    ).order_by('-total_muebles_inmuebles')
 
-        inmuebles = BienInmueble.objects.filter(
-            election=election,
-            person=person,
-        )
-        if inmuebles:
-            person.inmuebles = 0
-            for inmueble in inmuebles:
-                person.inmuebles += inmueble.decAutovaluo
-        else:
-            person.inmuebles = 0
+    paginator, page = do_pagination(request, persons)
+    context['candidates'] = paginator
+    context['page'] = page
 
-        person.total_muebles_inmuebles = person.inmuebles + person.muebles
-        persons.append(person)
-
-    context['candidates'] = sorted(persons, key=lambda x: x.total_muebles_inmuebles, reverse=True)
-    context['ingresos'] = Ingresos.objects.filter(
-
-    )
     return render(
         request,
         'votes/bienes.html',
