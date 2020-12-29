@@ -236,7 +236,11 @@ def crawl_sentencia_obliga():
 
 def update_candidate_general_data():
     base_url = "https://plataformaelectoral.jne.gob.pe/HojaVida/GetAllHVDatosPersonales?param="
-    candidates = Person.objects.filter(strPaisNacimiento__isnull=True)
+    election = Elections.objects.get(name='Elecciones Generales 2021')
+    candidates = Person.objects.filter(
+        strPaisNacimiento__isnull=True,
+        elections=election,
+    )
 
     for candidate in candidates:
         print(f'processing {candidate}')
