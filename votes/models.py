@@ -27,8 +27,8 @@ class Person(models.Model):
     full_search = SearchVectorField(null=True)
 
     dni_number = models.CharField(max_length=8, unique=True, null=True)
-    first_names = models.TextField()
-    last_names = models.TextField()
+    first_names = models.TextField(null=True)
+    last_names = models.TextField(null=True)
     elections = models.ManyToManyField(
         Elections,
         help_text="Elecciones donde postuló"
