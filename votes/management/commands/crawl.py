@@ -21,6 +21,9 @@ class Command(BaseCommand):
                             help='crawl sentencia penal')
         parser.add_argument('-cso', '--crawl_sentencia_obliga', action='store_true',
                             help='crawl sentencia obliga')
+        parser.add_argument('-ucgd', '--update_candidate_general_data', action='store_true',
+                            help='update_candidate_general_data')
+
 
     def handle(self, *args, **options):
         if options.get("crawl_lists_candidates"):
@@ -33,6 +36,8 @@ class Command(BaseCommand):
             crawl_sentencia_penal()
         elif options.get("crawl_sentencia_obliga"):
             crawl_sentencia_obliga()
+        elif options.get("update_candidate_general_data"):
+            update_candidate_general_data()
 
 
 def crawl_lists_candidates():
@@ -227,3 +232,44 @@ def crawl_sentencia_obliga():
                 print(f"created {obj}")
             else:
                 print(f"updated {obj}")
+
+
+def update_candidate_general_data():
+    base_url = "https://plataformaelectoral.jne.gob.pe/HojaVida/GetAllHVDatosPersonales?param="
+    candidates = Person.objects.filter(strPaisNacimiento__isnull=True)
+
+    for candidate in candidates:
+        print(f'processing {candidate}')
+        id_hoja_de_vida = candidate.idHojaVida.idHojaVida
+        id_org_politica = candidate.idOrganizacionPolitica
+        id_proceso = candidate.idProcesoElectoral
+        url = f"{base_url}{id_hoja_de_vida}-0-{id_org_politica}-{id_proceso}"
+        res = requests.get(url)
+        data = res.json()
+        try:
+            item = data.get("data")[0]
+        except:
+            print(candidate, url)
+            continue
+
+        dni = item["strDocumentoIdentidad"]
+        to_pop = [
+            "idOrganizacionPolitica",
+            "strDocumentoIdentidad",
+            "strProcesoElectoral",
+            "idTipoEleccion",
+            "intItem",
+            "idUsuario",
+            "idHojaVida",
+        ]
+        for i in to_pop:
+            item.pop(i)
+
+        obj, created = Person.objects.update_or_create(
+            strDocumentoIdentidad=dni,
+            defaults=item,
+        )
+        if created:
+            print(f"created {obj}")
+        else:
+            print(f"updated {obj}")
