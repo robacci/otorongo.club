@@ -99,7 +99,7 @@ def update_candidates_in_lists():
 
     for exp in Expediente.objects.filter(
         str_materia__icontains='solici'
-    ).order_by('-id'):
+    ).order_by('id'):
         print(exp.id)
         sleep(0.05)
         url = f"{base_url}{exp.str_cod_expediente_ext}"
@@ -119,6 +119,7 @@ def update_candidates_in_lists():
                 if created:
                     person.elections.add(election)
                     Person.objects.filter(id=person.id).update(**item)
+                    person.refresh_from_db()
 
                     person.idHojaVida = hoja_vida
                     person.dni_number = person.strDocumentoIdentidad
