@@ -12,6 +12,7 @@
   <table class="table table-striped">
     <thead>
     <tr>
+      <th>Foto</th>
       <th>Nombre</th>
       <th>DNI</th>
       <th>Partido</th>
@@ -24,6 +25,13 @@
     <tbody>
       {% for candidate in page.object_list %}
         <tr>
+          <td>
+            <img
+              src="data:image/png;base64, {{ candidate.person.photo.image }}"
+              alt="Foto"
+              width="75px"
+            /><br/>
+          </td>
           <td>
             {{ candidate.person.last_names }} {{ candidate.person.first_names }}
           </td>
