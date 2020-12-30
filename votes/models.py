@@ -27,8 +27,8 @@ class Person(models.Model):
     full_search = SearchVectorField(null=True)
 
     dni_number = models.CharField(max_length=8, unique=True, null=True)
-    first_names = models.TextField()
-    last_names = models.TextField()
+    first_names = models.TextField(null=True)
+    last_names = models.TextField(null=True)
     elections = models.ManyToManyField(
         Elections,
         help_text="Elecciones donde postuló"
@@ -51,10 +51,10 @@ class Person(models.Model):
     strJoven = models.TextField(null=True, blank=True)
     strDesignado = models.TextField(null=True, blank=True)
     idHojaVida = models.ForeignKey(HojaVida, null=True, blank=True, on_delete= models.SET_NULL)
-    idOrganizacionPolitica = models.IntegerField(null=True, blank=True)
+    idOrganizacionPolitica = models.IntegerField(null=True, blank=True, db_index=True)
     idProcesoElectoral = models.IntegerField(null=True, blank=True)
     strProcesoElectoral = models.TextField(null=True, blank=True)
-    strOrganizacionPolitica = models.TextField(null=True, blank=True)
+    strOrganizacionPolitica = models.TextField(null=True, blank=True, db_index=True)
     strAmbiente = models.TextField(null=True, blank=True)
     strAmbienteSije = models.TextField(null=True, blank=True)
     strUbigeoProcesal = models.TextField(null=True, blank=True)
@@ -170,8 +170,17 @@ class Ingresos(models.Model):
     strAnioIngresos = models.TextField(null=True, blank=True)
 
 
+class CompiledOrg(models.Model):
+    """Store compiled data about income and properties for political parties"""
+    name = models.TextField(null=True)
+    idOrganizacionPolitica = models.IntegerField(null=True)
+    total_sentencia_penal = models.IntegerField(null=True, default=0)
+    total_sentencia_obliga = models.IntegerField(null=True, default=0)
+    total_sentencias = models.IntegerField(null=True, default=0)
+
+
 class CompiledPerson(models.Model):
-    """Store compiled data about income and properties"""
+    """Store compiled data about income and properties for persons"""
     person = models.ForeignKey(Person, null=True, on_delete=SET_NULL)
     ingreso = models.ForeignKey(Ingresos, null=True, on_delete=SET_NULL)
     ingreso_total = models.IntegerField(null=True)
@@ -402,8 +411,8 @@ class BienMueble(models.Model):
 class BienInmueble(models.Model):
     election = models.ForeignKey(Elections, null=True, on_delete=SET_NULL)
     person = models.ForeignKey(Person, null=True, on_delete=SET_NULL)
-    idHVBienInmueble = models.IntegerField(null=True, blank=True, unique=True)
     idHojaVida = models.ForeignKey(HojaVida, null=True, blank=True, on_delete= models.SET_NULL)
+    idHVBienInmueble = models.IntegerField(null=True, blank=True, unique=True)
     intItemInmueble = models.IntegerField(null=True, blank=True)
     decAutovaluo = models.IntegerField(null=True, blank=True)
     idEstado = models.IntegerField(null=True, blank=True)

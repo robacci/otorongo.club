@@ -16,7 +16,10 @@ class Command(BaseCommand):
 def import_data():
     print("processing")
     election = Elections.objects.get(name='Elecciones Generales 2021')
-    persons = Person.objects.filter(elections=election)
+    persons = Person.objects.filter(
+        elections=election,
+        photo__isnull=True,
+    )
 
     base_url = 'https://declara.jne.gob.pe'
 
