@@ -4,7 +4,7 @@ from django.core.management.base import BaseCommand
 import requests
 
 from votes.models import Person, Elections, SentenciaPenal, SentenciaObliga, Department, Expediente, \
-    HojaVida
+    HojaVida, BienInmueble, BienMueble
 
 
 class Command(BaseCommand):
@@ -23,6 +23,14 @@ class Command(BaseCommand):
                             help='crawl sentencia obliga')
         parser.add_argument('-ucgd', '--update_candidate_general_data', action='store_true',
                             help='update_candidate_general_data')
+        parser.add_argument('-ucbi', '--update_candidate_bien_inmueble', action='store_true',
+                            help='update_candidate_bien_inmueble')
+        parser.add_argument('-ucbm', '--update_candidate_bien_mueble', action='store_true',
+                            help='update_candidate_bien_mueble')
+        parser.add_argument('-ucsp', '--update_candidate_sentencia_penal', action='store_true',
+                            help='update_candidate_sentencia_penal')
+        parser.add_argument('-ucso', '--update_candidate_sentencia_obliga', action='store_true',
+                            help='update_candidate_sentencia_obliga')
 
 
     def handle(self, *args, **options):
@@ -38,6 +46,14 @@ class Command(BaseCommand):
             crawl_sentencia_obliga()
         elif options.get("update_candidate_general_data"):
             update_candidate_general_data()
+        elif options.get("update_candidate_bien_inmueble"):
+            update_candidate_bien_inmueble()
+        elif options.get("update_candidate_bien_mueble"):
+            update_candidate_bien_mueble()
+        elif options.get("update_candidate_sentencia_penal"):
+            update_candidate_sentencia_penal()
+        elif options.get("update_candidate_sentencia_obliga"):
+            update_candidate_sentencia_obliga()
 
 
 def crawl_lists_candidates():
@@ -164,6 +180,46 @@ def crawl_candidates_in_lists():
                 Person.objects.filter(id=person.id).update(**item)
 
 
+def update_candidate_sentencia_penal():
+    base_url = "https://plataformaelectoral.jne.gob.pe/HojaVida/GetAllHVSentenciaPenal?Ids="
+    election = Elections.objects.get(name='Elecciones Generales 2021')
+    candidates = Person.objects.filter(elections=election)
+    candidates_count = candidates.count()
+
+    i = 1
+    for candidate in candidates:
+        i += 1
+        if candidate.sentenciapenal_set.all().count() > 0:
+            continue
+
+        print(f"doing candidate {i}/{candidates_count}")
+        id_hoja_de_vida = candidate.idHojaVida.idHojaVida
+        url = f"{base_url}{id_hoja_de_vida}-0-ASC"
+        res = requests.get(url)
+        data = res.json()
+        items = data.get("data")
+
+        for item in items:
+            if item.get("strTengoSentenciaPenal") == "2":
+                continue
+            obj_id = item["idHVSentenciaPenal"]
+            item.pop("idHVSentenciaPenal")
+            item["idHojaVida"] = candidate.idHojaVida
+            obj, created = SentenciaPenal.objects.update_or_create(
+                idHVSentenciaPenal=obj_id,
+                defaults=item,
+            )
+            obj.person = candidate
+            obj.idHojaVida = candidate.idHojaVida
+            obj.election = election
+            obj.save()
+
+            if created:
+                print(f"created {obj}")
+            else:
+                print(f"updated {obj}")
+
+
 def crawl_sentencia_penal():
     base_url = "https://plataformaelectoral.jne.gob.pe/HojaVida/GetAllHVSentenciaPenal?Ids="
     election = Elections.objects.get(name='Elecciones Generales 2021')
@@ -191,6 +247,46 @@ def crawl_sentencia_penal():
                 defaults=item,
             )
             obj.person = candidate
+            obj.save()
+
+            if created:
+                print(f"created {obj}")
+            else:
+                print(f"updated {obj}")
+
+
+def update_candidate_sentencia_obliga():
+    base_url = "https://plataformaelectoral.jne.gob.pe/HojaVida/GetAllHVSentenciaObliga?Ids="
+    election = Elections.objects.get(name='Elecciones Generales 2021')
+    candidates = Person.objects.filter(elections=election)
+    candidates_count = candidates.count()
+
+    i = 1
+    for candidate in candidates:
+        i += 1
+        if candidate.sentenciaobliga_set.all().count() > 0:
+            continue
+        print(f"doing candidate {i}/{candidates_count}")
+
+        id_hoja_de_vida = candidate.idHojaVida.idHojaVida
+        url = f"{base_url}{id_hoja_de_vida}-0-ASC"
+        res = requests.get(url)
+        data = res.json()
+        items = data.get("data")
+
+        for item in items:
+            if item.get("strTengoSentenciaObliga") == "2":
+                continue
+            obj_id = item["idHVSentenciaObliga"]
+            item.pop("idHVSentenciaObliga")
+            item["idHojaVida"] = candidate.idHojaVida
+            obj, created = SentenciaObliga.objects.update_or_create(
+                idHVSentenciaObliga=obj_id,
+                defaults=item,
+            )
+            obj.person = candidate
+            obj.idHojaVida = candidate.idHojaVida
+            obj.election = election
             obj.save()
 
             if created:
@@ -277,3 +373,80 @@ def update_candidate_general_data():
             print(f"created {obj}")
         else:
             print(f"updated {obj}")
+
+
+def update_candidate_bien_inmueble():
+    base_url = "https://plataformaelectoral.jne.gob.pe/HojaVida/GetAllHVBienInmueble?Ids="
+    election = Elections.objects.get(name='Elecciones Generales 2021')
+    candidates = Person.objects.filter(elections=election)
+
+    for candidate in candidates:
+        if candidate.bieninmueble_set.all().count() > 0:
+            continue
+
+        id_hoja_de_vida = candidate.idHojaVida.idHojaVida
+        url = f"{base_url}{id_hoja_de_vida}-0-ASC"
+        res = requests.get(url)
+        data = res.json()
+        items = data.get("data")
+
+        for item in items:
+            if item["strTengoInmueble"] == "2":
+                continue
+
+            idHVBienInmueble = item["idHVBienInmueble"]
+            item.pop("idHVBienInmueble")
+            item["idHojaVida"] = candidate.idHojaVida
+            obj, created = BienInmueble.objects.update_or_create(
+                idHVBienInmueble=idHVBienInmueble,
+                defaults=item,
+            )
+            obj.person = candidate
+            obj.election = election
+            obj.idHojaVida = candidate.idHojaVida
+            obj.save()
+
+            if created:
+                print(f"created {obj}")
+
+
+def update_candidate_bien_mueble():
+    election = Elections.objects.get(name='Elecciones Generales 2021')
+    base_url = "https://plataformaelectoral.jne.gob.pe/HojaVida/GetAllHVBienMueble?Ids="
+    candidates = Person.objects.filter(elections=election)
+    candidates_count = candidates.count()
+
+    i = 1
+    for candidate in candidates:
+        if candidate.bienmueble_set.all().count() > 0:
+            i += 1
+            continue
+
+        print(f"doing candidate {i}/{candidates_count}")
+        id_hoja_de_vida = candidate.idHojaVida.idHojaVida
+        url = f"{base_url}{id_hoja_de_vida}-0-ASC"
+        res = requests.get(url)
+        data = res.json()
+        items = data.get("data")
+
+        for item in items:
+            if item["strTengoBienMueble"] == "2":
+                continue
+
+            obj_id = item["idHVBienMueble"]
+            item.pop("idHVBienMueble")
+            item["idHojaVida"] = candidate.idHojaVida
+            obj, created = BienMueble.objects.update_or_create(
+                idHVBienMueble=obj_id,
+                defaults=item,
+            )
+
+            obj.person = candidate
+            obj.election = election
+            obj.idHojaVida = candidate.idHojaVida
+
+            if created:
+                print(f"created {obj}")
+            else:
+                print(f"updated {obj}")
+

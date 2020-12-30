@@ -6,7 +6,8 @@ from django.conf import settings
 from django.core.cache.backends.base import DEFAULT_TIMEOUT
 from django.views.decorators.csrf import csrf_exempt
 
-from votes.models import Person, Elections, Ingresos, BienMueble, BienInmueble, CompiledPerson
+from votes.models import Person, Elections, Ingresos, BienMueble, BienInmueble, CompiledPerson, \
+    CompiledOrg
 from votes.utils import Paginator
 
 CACHE_TTL = getattr(settings, 'CACHE_TTL', DEFAULT_TIMEOUT)
@@ -62,11 +63,16 @@ def ingresos_2021(request):
     )
 
 
-def sentencias_2021(request):
+def sentencias_2021(request, org_id = None):
     context, election = make_context()
     persons = CompiledPerson.objects.filter(
         person__elections=election,
     ).order_by('-sentencias_total')
+
+    if org_id:
+        persons = persons.filter(person__idOrganizacionPolitica=org_id)
+        org = CompiledOrg.objects.get(idOrganizacionPolitica=org_id)
+        context['org_name'] = org.name
 
     paginator, page = do_pagination(request, persons)
     context['candidates'] = paginator
@@ -103,6 +109,29 @@ def make_context():
     )
     context = {'election': election}
     return context, election
+
+
+def partidos_sentencias_2021(request):
+    context, election = make_context()
+    context['orgs'] = CompiledOrg.objects.all().order_by('-total_sentencias')
+    return render(
+        request,
+        'votes/partido_sentencias.html',
+        context,
+    )
+
+
+def partido_2021(request, org_id):
+    context, election = make_context()
+    context['candidates'] = CompiledPerson.objects.filter(
+        person__idOrganizacionPolitica=org_id,
+        person__elections=election,
+    )
+    return render(
+        request,
+        'votes/partido.html',
+        context,
+    )
 
 
 def candidato_2021(request, dni):

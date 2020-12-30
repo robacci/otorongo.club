@@ -6,20 +6,12 @@
 {% endblock title %}
 
 {% block content %}
-  <h3>Lista de candidatos a elecciones generales 2021 ordenados por número de sentencias declaradas</h3>
-
-  {% if org_name %}
-    <h4>
-      Mostrando: {{ org_name }}
-    </h4>
-  {% endif %}
+  <h3>Lista de organizaciones políticas que postulan a elecciones generales 2021 ordenados por número de sentencias declaradas</h3>
 
   <table class="table table-striped">
     <thead>
     <tr>
-      <th>Nombre</th>
-      <th>DNI</th>
-      <th>Partido</th>
+      <th>Organización política</th>
       <th>Total Sentencias</th>
       <th>Sentencias penales</th>
       <th>Sentencias de obligaciones</th>
@@ -27,27 +19,19 @@
 
     </thead>
     <tbody>
-      {% for candidate in page.object_list %}
+      {% for org in orgs %}
         <tr>
           <td>
-            {{ candidate.person.last_names }} {{ candidate.person.first_names }}
+            <a href="/2021/sentencias/{{ org.idOrganizacionPolitica }}/">{{ org.name }}</a>
           </td>
           <td>
-            <a href="/2021/candidato/{{ candidate.person.dni_number }}">
-              {{ candidate.person.dni_number }}
-            </a>
+            <b>{{ org.total_sentencias|intcomma }}</b>
           </td>
           <td>
-            {{ candidate.person.strOrganizacionPolitica }}
+            {{ org.total_sentencia_penal|intcomma }}
           </td>
           <td>
-            <b>{{  candidate.sentencias_total|intcomma }}</b>
-          </td>
-          <td>
-            {{  candidate.sentencias_penales|intcomma }}
-          </td>
-          <td>
-            {{  candidate.sentencias_obliga|intcomma }}
+            {{ org.total_sentencia_obliga|intcomma }}
           </td>
         </tr>
       {% endfor %}
