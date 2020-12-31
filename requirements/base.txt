@@ -7,3 +7,4 @@ gunicorn
 django-redis
 django-extensions
 django-debug-toolbar
+django-environ
