@@ -62,15 +62,3 @@ services:
       - app_data:/data
     expose:
       - '6379'
-  cron:
-    restart: always
-    build:
-      context: ../
-      dockerfile: docker/cron/Dockerfile
-    image: otorongo/otorongo_app
-    volumes:
-      - app_data:/data
-    depends_on:
-      - db
-    environment:
-      DJANGO_SETTINGS_MODULE: 'otorongo.settings.production'
