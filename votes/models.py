@@ -190,6 +190,7 @@ class CompiledPerson(models.Model):
     sentencias_penales = models.IntegerField(null=True)
     sentencias_obliga = models.IntegerField(null=True)
     sentencias_total = models.IntegerField(null=True)
+    tweeted = models.BooleanField(default=False)
 
 
 class SentenciaObliga(models.Model):

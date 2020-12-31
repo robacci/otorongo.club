@@ -8,3 +8,4 @@ django-redis
 django-extensions
 django-debug-toolbar
 django-environ
+twitterbot2==0.0.5

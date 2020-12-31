@@ -26,6 +26,11 @@ env.read_env(f'{ROOT_DIR}/.env')
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = env('SECRET_KEY')
 
+TWITTER_CONSUMER_KEY = env('TWITTER_CONSUMER_KEY')
+TWITTER_CONSUMER_SECRET = env('TWITTER_CONSUMER_SECRET')
+TWITTER_OAUTH_TOKEN = env('TWITTER_OAUTH_TOKEN')
+TWITTER_OAUTH_TOKEN_SECRET = env('TWITTER_OAUTH_TOKEN_SECRET')
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
