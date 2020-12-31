@@ -29,6 +29,7 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
   {% load static %}
   <link rel="shortcut icon" href="{% static 'votes/img/favicon.ico' %}">
+  <link href="{% static 'votes/css/sticky-footer.css' %}" rel="stylesheet">
 </head>
 <body>
 
@@ -72,5 +73,23 @@
   {% block content %}{% endblock content %}
 
 </div>
+
+<footer class="footer">
+  <button type="button" class="btn btn-light ml-3">
+    <a
+      href="https://github.com/aniversarioperu/otorongo.club"
+      target="_blank"
+    >
+      <span class="text-muted small">
+        Código fuente
+        <img
+          alt="otorongo código fuente"
+          width="24px"
+          src="{% static 'votes/img/github.svg' %}"
+        />
+      </span>
+    </a>
+  </button>
+</footer>
 </body>
 </html>
