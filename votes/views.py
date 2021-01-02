@@ -166,6 +166,9 @@ def candidato_2021(request, dni):
                                     context['ingresos'].decOtroIngresoPrivado
     context['sentencias_penal'] = person.sentenciapenal_set.all()
     context['sentencias_obliga'] = person.sentenciaobliga_set.all()
+    context['compiled_person'] = CompiledPerson.objects.get(
+        person=person
+    )
     return render(
         request,
         'votes/candidate.html',

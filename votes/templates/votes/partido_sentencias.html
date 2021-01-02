@@ -8,17 +8,18 @@
 {% block content %}
   <h3>Lista de organizaciones políticas que postulan a elecciones generales 2021 ordenados por número de sentencias declaradas</h3>
 
-  <table class="table-responsive table-striped">
-    <thead>
-    <tr>
-      <th>Organización política</th>
-      <th>Total Sentencias</th>
-      <th>Sentencias penales</th>
-      <th>Sentencias de obligaciones</th>
-    </tr>
+  <div class="table-responsive">
+    <table class="table table-striped">
+      <thead>
+      <tr>
+        <th>Organización política</th>
+        <th>Total Sentencias</th>
+        <th>Sentencias penales</th>
+        <th>Sentencias de obligaciones</th>
+      </tr>
 
-    </thead>
-    <tbody>
+      </thead>
+      <tbody>
       {% for org in orgs %}
         <tr>
           <td>
@@ -35,8 +36,10 @@
           </td>
         </tr>
       {% endfor %}
-    </tbody>
-  </table>
+      </tbody>
+    </table>
+
+  </div>
 
   {% if page.has_previous or page.has_next %}
     <div class="text-center">

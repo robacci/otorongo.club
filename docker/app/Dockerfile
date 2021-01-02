@@ -14,6 +14,7 @@ RUN mkdir /pip_requirements
 COPY requirements/base.txt /pip_requirements/base.txt
 COPY .env /code/.env
 RUN pip install -r /pip_requirements/base.txt
+RUN /usr/sbin/service cron start
 
 RUN mkdir -p /code
 WORKDIR /code

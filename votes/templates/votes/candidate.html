@@ -47,17 +47,15 @@
             {{ candidate.strOrganizacionPolitica }}
           <br/>
 
-{#          <h6>Cargo al que Postula</h6>#}
-{#            {{ candidate.strCargoEleccion }}#}
-{#          <br/>#}
         </div>
       </div>
 
       <div class="card">
         <div class="card-body">
           <h5 class="card-title">Sentencias condenatorias firmes impuestas por delitos dolosos</h5>
-          <table class="table-responsive table-striped">
-            <thead>
+          <div class="table-responsive">
+            <table class="table table-striped">
+              <thead>
               <th>N.</th>
               <th>No de Expediente</th>
               <th>Fecha sentencia firme</th>
@@ -67,8 +65,8 @@
               <th>Modalidad</th>
               <th>Otra modalidad</th>
               <th>Cumplimiento del fallo</th>
-            </thead>
-            <tbody>
+              </thead>
+              <tbody>
               {% for sentencia in sentencias_penal %}
                 <tr>
                   <td>{{ sentencia.intItemSentenciaPenal }}</td>
@@ -82,8 +80,9 @@
                   <td>{{ sentencia.strCumpleFallo }}</td>
                 </tr>
               {% endfor %}
-            </tbody>
-          </table>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
 
@@ -93,45 +92,46 @@
             Sentencias que declaren fundadas por incumplimiento de obligaciones alimentarias,
             contractuales, laborales o por incurrir en violencia familiar, que hubieran quedado firmes.
           </h5>
-          <table class="table-responsive table-striped">
-            <thead>
+          <div class="table-responsive">
+            <table class="table table-striped">
+              <thead>
               <th>N.</th>
               <th>Materia de la demanda</th>
               <th>No de Expediente</th>
               <th>Órgano judicial</th>
               <th>Fallo/pena</th>
-            </thead>
-            <tbody>
-            {% for sentencia in sentencias_obliga %}
-              <tr>
-                <td>{{ sentencia.intItemSentenciaObliga }}</td>
-                <td>{{ sentencia.strMateriaSentencia }}</td>
-                <td>{{ sentencia.strExpedienteObliga }}</td>
-                <td>{{ sentencia.strOrganoJuridicialObliga }}</td>
-                <td>{{ sentencia.strFalloObliga }}</td>
-              </tr>
-            {% endfor %}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+              {% for sentencia in sentencias_obliga %}
+                <tr>
+                  <td>{{ sentencia.intItemSentenciaObliga }}</td>
+                  <td>{{ sentencia.strMateriaSentencia }}</td>
+                  <td>{{ sentencia.strExpedienteObliga }}</td>
+                  <td>{{ sentencia.strOrganoJuridicialObliga }}</td>
+                  <td>{{ sentencia.strFalloObliga }}</td>
+                </tr>
+              {% endfor %}
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
 
       <div class="card">
         <div class="card-body">
           <h5 class="card-title">DECLARACIÓN JURADA DE INGRESOS DE BIENES Y RENTAS</h5>
-          <table class="table-responsive table-striped">
-            <thead>
+          <div class="table-responsive">
+            <table class="table table-striped">
+              <thead>
               <th>Año declarado 2019</th>
               <th>Sector Público</th>
               <th>Sector Privado</th>
-{#              <th>TOTAL S/.</th>#}
-            </thead>
-            <tbody>
+              </thead>
+              <tbody>
               <tr>
                 <td>REMUNERACIÓN BRUTA ANUAL</td>
                 <td>{{ ingresos.decRemuBrutaPublico|intcomma }}</td>
                 <td>{{ ingresos.decRemuBrutaPrivado|intcomma }}</td>
-{#                <td>{{ ingresos.decRemuTotal|intcomma }}</td>#}
               </tr>
               <tr>
                 <td>RENTA BRUTA ANUAL POR EJERCICIO INDIVIDUAL</td>
@@ -146,60 +146,67 @@
               <tr>
                 <td><b>Total ingresos S/. {{ ingresos_total|intcomma }}</b></td>
               </tr>
-            </tbody>
-          </table>
+              </tbody>
+            </table>
+
+          </div>
         </div>
       </div>
 
       <div class="card">
         <div class="card-body">
           <h5 class="card-title">Bienes Inmuebles del Declarante y Sociedad de Gananciales</h5>
-          <h6>Inmuebles</h6>
-          <table class="table-responsive table-striped">
-            <thead>
+          <h6>Inmuebles. Total: S/. {{ compiled_person.inmuebles|intcomma }}</h6>
+          <div class="table-responsive">
+            <table class="table table-striped">
+              <thead>
               <th>N.</th>
               <th>Tipo de Bien</th>
               <th>Valor</th>
               <th>Comentario</th>
-            </thead>
-            <tbody>
-            {% for inmueble in inmuebles %}
-              <tr>
-                <td>{{ inmueble.intItemInmueble }}</td>
-                <td>{{ inmueble.strTipoBienInmueble }}</td>
-                <td>{{ inmueble.decAutovaluo|intcomma }}</td>
-                <td>{{ inmueble.strComentario|intcomma }}</td>
-              </tr>
-            {% endfor %}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+              {% for inmueble in inmuebles %}
+                <tr>
+                  <td>{{ inmueble.intItemInmueble }}</td>
+                  <td>{{ inmueble.strTipoBienInmueble }}</td>
+                  <td>{{ inmueble.decAutovaluo|intcomma }}</td>
+                  <td>{{ inmueble.strComentario|intcomma }}</td>
+                </tr>
+              {% endfor %}
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
 
       <div class="card">
         <div class="card-body">
           <h5 class="card-title">Bienes Muebles del Declarante y Sociedad de Gananciales</h5>
-          <h6>Muebles</h6>
-          <table class="table-responsive table-striped">
-            <thead>
-            <th>N.</th>
-            <th>Tipo de Bien</th>
-            <th>Característica</th>
-            <th>Valor</th>
-            <th>Comentario</th>
-            </thead>
-            <tbody>
-            {% for mueble in muebles %}
-              <tr>
-                <td>{{ mueble.intItemMueble }}</td>
-                <td>{{ mueble.strVehiculo }}</td>
-                <td>{{ mueble.strCaracteristica }}</td>
-                <td>{{ mueble.decValor|intcomma }}</td>
-                <td>{{ mueble.strComentario|intcomma }}</td>
-              </tr>
-            {% endfor %}
-            </tbody>
-          </table>
+          <h6>Muebles. Total: S/. {{ compiled_person.muebles|intcomma }}</h6>
+          <div class="table-responsive">
+            <table class="table table-striped">
+              <thead>
+              <th>N.</th>
+              <th>Tipo de Bien</th>
+              <th>Característica</th>
+              <th>Valor</th>
+              <th>Comentario</th>
+              </thead>
+              <tbody>
+              {% for mueble in muebles %}
+                <tr>
+                  <td>{{ mueble.intItemMueble }}</td>
+                  <td>{{ mueble.strVehiculo }}</td>
+                  <td>{{ mueble.strCaracteristica }}</td>
+                  <td>{{ mueble.decValor|intcomma }}</td>
+                  <td>{{ mueble.strComentario|intcomma }}</td>
+                </tr>
+              {% endfor %}
+              </tbody>
+            </table>
+
+          </div>
         </div>
       </div>
 

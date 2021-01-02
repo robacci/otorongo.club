@@ -14,20 +14,21 @@
     </h4>
   {% endif %}
 
-  <table class="table-responsive table-striped">
-    <thead>
-    <tr>
-      <th>Foto</th>
-      <th>Nombre</th>
-      <th>DNI</th>
-      <th>Partido</th>
-      <th>Total Sentencias</th>
-      <th>Sentencias penales</th>
-      <th>Sentencias de obligaciones</th>
-    </tr>
+  <div class="table-responsive">
+    <table class="table table-striped">
+      <thead>
+      <tr>
+        <th>Foto</th>
+        <th>Nombre</th>
+        <th>DNI</th>
+        <th>Partido</th>
+        <th>Total Sentencias</th>
+        <th>Sentencias penales</th>
+        <th>Sentencias de obligaciones</th>
+      </tr>
 
-    </thead>
-    <tbody>
+      </thead>
+      <tbody>
       {% for candidate in page.object_list %}
         <tr>
           <td>
@@ -59,8 +60,10 @@
           </td>
         </tr>
       {% endfor %}
-    </tbody>
-  </table>
+      </tbody>
+    </table>
+
+  </div>
 
   {% if page.has_previous or page.has_next %}
     <div class="text-center">

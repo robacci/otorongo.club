@@ -8,24 +8,25 @@
 {% block content %}
   <h3>Lista de candidatos a elecciones generales 2021 ordenados por remuneración declarada</h3>
 
-  <table class="table-responsive table-striped">
-    <thead>
-    <tr>
-      <th>Foto</th>
-      <th>Nombre</th>
-      <th>DNI</th>
-      <th>Partido</th>
-      <th>Total ingresos S/.</th>
-      <th>Ingreso Público S/.</th>
-      <th>Ingreso Privado S/.</th>
-      <th>Renta Público S/.</th>
-      <th>Renta Privado S/.</th>
-      <th>Otro ingreso Público S/.</th>
-      <th>Otro ingreso Privado S/.</th>
-    </tr>
+  <div class="table-responsive">
+    <table class="table table-striped">
+      <thead>
+      <tr>
+        <th>Foto</th>
+        <th>Nombre</th>
+        <th>DNI</th>
+        <th>Partido</th>
+        <th>Total ingresos S/.</th>
+        <th>Ingreso Público S/.</th>
+        <th>Ingreso Privado S/.</th>
+        <th>Renta Público S/.</th>
+        <th>Renta Privado S/.</th>
+        <th>Otro ingreso Público S/.</th>
+        <th>Otro ingreso Privado S/.</th>
+      </tr>
 
-    </thead>
-    <tbody>
+      </thead>
+      <tbody>
       {% for candidate in page.object_list %}
         <tr>
           <td>
@@ -69,8 +70,10 @@
           </td>
         </tr>
       {% endfor %}
-    </tbody>
-  </table>
+      </tbody>
+    </table>
+
+  </div>
 
   {% if page.has_previous or page.has_next %}
     <div class="text-center">
